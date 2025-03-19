@@ -9,7 +9,7 @@ import tensorflow as tf
 
 
 # Constant
-BASE_API_URL = "https://cbda-175-139-159-165.ngrok-free.app"
+BASE_API_URL = "https://f5fe-175-139-159-165.ngrok-free.app"
 FLOW_ID = "3e733bf0-7649-4b45-af59-989397f3e2e6"
 ENDPOINT = "" # You can set a specific endpoint name in the flow settings
 TWEAKS = {
