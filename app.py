@@ -8,7 +8,7 @@ from PIL import Image
 import tensorflow as tf
 
 # Constant
-BASE_API_URL = "https://b808-175-139-159-165.ngrok-free.app"
+BASE_API_URL = "http://127.0.0.1:7860"
 FLOW_ID = "3e733bf0-7649-4b45-af59-989397f3e2e6"
 ENDPOINT = "" # You can set a specific endpoint name in the flow settings
 TWEAKS = {
@@ -88,7 +88,7 @@ def main():
     st.write("### 🤔 Unsure about recycling your items? Just text me your questions or upload a picture of your item here!")
     st.markdown('''📢 While KitarBot strives to provide accurate and useful information, it may not always be accurate or completely up to date. 
                 Your patience and understanding are greatly appreciated as the KitarBot does its best to assist you.''')
-    
+
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
@@ -109,19 +109,18 @@ def main():
             predict = np.argmax(model.predict(image))
             class_names = ['battery', 'biological', 'cardboard', 'clothes', 'glass', 'metal', 'paper', 'plastic', 'shoes', 'trash']
             predicted_class = class_names[predict]
-            #st.sidebar.success(f"**Predicted Class:** {predicted_class}")
 
             # ✅ Check if the class info was already added to avoid duplicates
-            if not any(msg["content"] == f"{predicted_class}?" for msg in st.session_state.messages):
+            if not any(msg["content"] == f"{predicted_class}" for msg in st.session_state.messages):
                 # Save predicted class as a user message
                 st.session_state.messages.append({
                     "role": "user",
-                    "content": f"{predicted_class}?",
+                    "content": f"{predicted_class}",
                     "avatar": "💬"
                 })
 
                 # Get assistant response and save it
-                assistant_response = extract_message(run_flow(f"{predicted_class}?", tweaks=TWEAKS))
+                assistant_response = extract_message(run_flow(f"{predicted_class}", tweaks=TWEAKS))
                 st.session_state.messages.append({
                     "role": "assistant",
                     "content": assistant_response,
