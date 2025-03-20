@@ -8,7 +8,7 @@ from PIL import Image
 import tensorflow as tf
 
 # Constant
-BASE_API_URL = "https://0585-115-132-202-179.ngrok-free.app/"
+BASE_API_URL = "https://95f2-175-139-159-165.ngrok-free.app"
 FLOW_ID = "3e733bf0-7649-4b45-af59-989397f3e2e6"
 ENDPOINT = "" # You can set a specific endpoint name in the flow settings
 TWEAKS = {
@@ -109,18 +109,19 @@ def main():
             predict = np.argmax(model.predict(image))
             class_names = ['battery', 'biological', 'cardboard', 'clothes', 'glass', 'metal', 'paper', 'plastic', 'shoes', 'trash']
             predicted_class = class_names[predict]
+            st.sidebar.success(f"**The item class is** {predicted_class}")
 
             # ✅ Check if the class info was already added to avoid duplicates
-            if not any(msg["content"] == f"{predicted_class}" for msg in st.session_state.messages):
+            if not any(msg["content"] == f"How to recycle {predicted_class}?" for msg in st.session_state.messages):
                 # Save predicted class as a user message
                 st.session_state.messages.append({
                     "role": "user",
-                    "content": f"{predicted_class}",
+                    "content": f"How to recycle {predicted_class}?",
                     "avatar": "💬"
                 })
 
                 # Get assistant response and save it
-                assistant_response = extract_message(run_flow(f"{predicted_class}", tweaks=TWEAKS))
+                assistant_response = extract_message(run_flow(f"How to recycle {predicted_class}?", tweaks=TWEAKS))
                 st.session_state.messages.append({
                     "role": "assistant",
                     "content": assistant_response,
